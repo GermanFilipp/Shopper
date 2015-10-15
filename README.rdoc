@@ -1,0 +1,36 @@
+== Shopper
+
+A simple shoppong cart for Rails
+
+==Getting started
+
+Add in your gemfile and bundle
+	gem 'shopper', git: "https://github.com/GermanFilipp/Shopper.git"
+
+After gem install, copy migrations and run db:migrate
+	rake shopper:install:migrations
+   rake db:migrate
+
+Add current_customer method to ApplicationController.
+
+
+== Installation
+
+Run into console
+   rails g shopper:install
+
+After installation define your class-name in 'app/config/initializers/shopper.rb'
+By default:
+	Shopper.customer_class = "Customer"
+   Shopper.product_class  = "Book"
+
+Then define your routes in routes.rb
+By default:
+	mount Shopper::Engine, at: '/cart', as: 'Shopper'
+
+== Views
+
+Run into console
+  rails g shopper:view
+
+This project rocks and uses MIT-LICENSE.
