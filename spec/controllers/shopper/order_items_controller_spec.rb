@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module Shopper
   RSpec.describe OrderItemsController, type: :controller
+   routes { Shopper::Engine.routes }
 
   let(:customer) { FactoryGirl.create(:customer) }
 
