@@ -1,5 +1,5 @@
 require 'rails_helper'
-include ActionView::Helpers::NumberHelper
+
 
 feature 'Add book' do
   given(:customer) {FactoryGirl.create(:customer)}
