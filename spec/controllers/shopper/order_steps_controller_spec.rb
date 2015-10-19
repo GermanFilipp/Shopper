@@ -5,7 +5,7 @@ module Shopper
     let(:customer) { FactoryGirl.create(:customer) }
     let!(:order){customer.order_in_progress}
     let!(:order_steps_form){OrderStepsForm.new(order)}
-
+    routes { Shopper::Engine.routes }
     before do
       sign_in customer
     end
