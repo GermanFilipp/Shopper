@@ -3,7 +3,7 @@ require 'rails_helper'
 module Shopper
   RSpec.describe OrdersController, type: :controller do
     let(:customer) { FactoryGirl.create(:customer) }
-
+    routes { Shopper::Engine.routes }
     let(:order){FactoryGirl.create(:order,id: 1, customer: customer, total_price:1, delivery_price:2)}
 
     before do
