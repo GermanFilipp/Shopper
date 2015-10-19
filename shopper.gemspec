@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Shopper::VERSION
   s.authors     = ["GermanFilipp"]
   s.email       = ["ger772@yandex.ru"]
-  s.homepage    = "TODO"
+  s.homepage    = "https://github.com/GermanFilipp/Shopper"
   s.summary     = "TODO: Summary of Shopper."
   s.description = "TODO: Description of Shopper."
   s.license     = "MIT"
