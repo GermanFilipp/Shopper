@@ -1,7 +1,7 @@
 module Shopper
   class Order < ActiveRecord::Base
     include AASM
-    belongs_to :customer, class_name: Shopper.customer_class
+    belongs_to :customer, polymorphic: true
     belongs_to :credit_card
     belongs_to :shipping_address, class_name: "Address",  autosave: true
     belongs_to :billing_address, class_name: "Address", autosave: true
@@ -32,7 +32,7 @@ module Shopper
       state :delivered
       state :canceled
 
-      event :checkout, :before => :set_completed_date, :after => :update_sold_count do
+      event :checkout, :before => :set_completed_date do
         transitions :from => :in_progress, :to => :in_queue
       end
 
@@ -60,15 +60,13 @@ module Shopper
       @total_items
     end
 
-    def add_product(product,quantity)
-      order = self
-      order_item = order.order_items.find_by(:product => product)
+    def add_product(product, quantity=1)
+      order_item = self.order_items.find_by(product: product)
       if order_item.nil?
-        order_item = OrderItem.new({:product => product, :order => order, :price => product.price, :quantity => quantity})
+        order_items.create(product: product, quantity: quantity)
       else
-        order_item.quantity += quantity
+        order_items.update(quantity: quantity.to_i)
       end
-      order_item.save
     end
 
     def total_price
@@ -101,12 +99,14 @@ module Shopper
       self.order_items.includes(:product).references(:product)
     end
 
+
     def update_sold_count
       return false if self.state  == STATE_IN_PROGRESS
       self.order_items.each do |order_item|
-        Shopper.product_class.where(id: order_item.product_id).update_all("sold_count = sold_count + #{order_item.quantity}")
+        order_item.product_type.constantize.where(id: order_item.product_id).update_all("sold_count = sold_count + #{order_item.quantity}")
       end
     end
+
 
   end
 end

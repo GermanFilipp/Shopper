@@ -1,20 +1,40 @@
 require "shopper/engine"
+require 'shopper/controller_methods'
+require 'shopper/model_methods'
 
 module Shopper
-
-
-  mattr_accessor :customer_class, :product_class
-
   mattr_accessor :parent_controller
   @@parent_controller = 'ApplicationController'
 
-  def self.customer_class
-    @@customer_class.constantize
+
+  PRODUCT_CLASSES = []
+  REQUIRED = %w(active_record)
+
+  mattr_accessor :set_order_on_each_request
+  @set_order_on_each_request = false
+
+
+  def self.setup
+    yield self
   end
 
-  def self.product_class
-    @@product_class.constantize
+  def self.active_record_missing
+    puts <<-WARN
+      Warning: no ActiveRecord detected
+      ActiveRecord is required for this engine.
+      Your Gemfile might not be configured properly.
+      ---- try ----
+      gem 'active_record''
+    WARN
   end
 
+  REQUIRED.each do |r|
+    begin
+      require r
+    rescue LoadError => ex
+      self.send "#{r}_missing".to_sym
+      raise ex
+    end
+  end
 
 end

@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
 
-  mount Shopper::Engine => "/shopper"
+
+
+  devise_for :users
+  mount Shopper::Engine => "/shopper", as: 'Shopper'
+
+  root 'books#index'
+
+  resources :books, only: [:index, :show]
+
 end

@@ -1,6 +1,6 @@
 module Shopper
   class ApplicationController < Shopper.parent_controller.constantize
-
+    before_action set_current_order unless Shopper.set_order_on_each_request
 
     def current_customer_order
       current_customer.orders.find_or_create_by(state: Order::STATE_IN_PROGRESS) unless current_customer.nil?
